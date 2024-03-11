@@ -3,13 +3,14 @@ package CollectionProject.Runtime;
 import CollectionProject.Object.Address;
 import CollectionProject.Object.Organization;
 
-import java.util.Hashtable;
-import java.util.Scanner;
+import java.util.*;
 
 import static CollectionProject.Object.OrganizationType.*;
 import static CollectionProject.Runtime.Manager.defaultError;
 
 public class Commands {
+
+
 
     public static void runProgram() {  // VAl: главный метод, который будет запускаться в main и будет проводить всю работу программы
         System.out.println("Добро пожаловать в Collection Project!\n" +
@@ -19,37 +20,44 @@ public class Commands {
         Scanner scanner = new Scanner(System.in); // VAl: создание сканера для считывания пользовательского ввода
         String chosenCommand; // VAl: инициализация String, чтобы тот был виден в switch case'ах
 
-        do {
-            /* VAl: создание цикла do, который будет вмещать в себя switch case для работы с программой,
-            после выбора команды и срабатывания определённого кейса, будет водить программу по кругу */
-
-
-            /* VAL: для того, чтобы конструктор работал корректно вместе с полем postalAddress, т.к. это является отдельным
+        /* VAL: для того, чтобы конструктор работал корректно вместе с полем postalAddress, т.к. это является отдельным
             классом и строка street является отдельным экземпляром этого класса, нам нужно, собственно, создать объект класса
             Адрес и позже уже вложить его в конструкт нашего класса Организации и объект организации
              */
 
-            Address dunkinDonutsAddress = new Address("Город Пушкин, улица Колотушкина");  // тут создаётся объект Адреса с нужным нам адресом
-            Organization dunkinDonuts = new Organization("Dunkin Donuts", 66, PUBLIC, dunkinDonutsAddress); // сюда в Организацию он и вставляется, ну и так со всеми
+        Address dunkinDonutsAddress = new Address("Город Пушкин, улица Колотушкина");  // тут создаётся объект Адреса с нужным нам адресом
+        Organization dunkinDonuts = new Organization("Dunkin Donuts", 66, PUBLIC, dunkinDonutsAddress); // сюда в Организацию он и вставляется, ну и так со всеми
 
-            // VAl: Т.к. тут поле является null, то создавать адрес под него не нужно
-            Organization kFC = new Organization("KFC", 99, OPEN_JOINT_STOCK_COMPANY, null);
+        Organization kFC = new Organization("KFC", 99, OPEN_JOINT_STOCK_COMPANY, null);
 
-            Address waterSportsAddress = new Address("Город Кульма, улица Улиткина");
-            Organization waterSports = new Organization("KFC", 22, PUBLIC, waterSportsAddress);
+        Address waterSportsAddress = new Address("Город Кульма, улица Улиткина");
+        Organization waterSports = new Organization("Water Sports", 22, PUBLIC, waterSportsAddress);
 
-            Address myNewBankAddress = new Address("Город Рига, улица Тескана");
-            Organization myNewBank = new Organization("My New Bank", 39, TRUST, myNewBankAddress);
+        Address myNewBankAddress = new Address("Город Рига, улица Тескана");
+        Organization myNewBank = new Organization("My New Bank", 39, TRUST, myNewBankAddress);
 
-            System.out.println(kFC);
-            System.out.println(dunkinDonuts);
-            System.out.println(waterSports);
-            System.out.println(myNewBank);
+        // VAl: создание organizationHashtable, где ключом у нас является ID, а самой хранящейся информацией объект организации
+        Hashtable<Long, Organization> organizationHashtable = new Hashtable<>();
+
+        organizationHashtable.put(dunkinDonuts.getID(), dunkinDonuts); // VAl: кладём в таблицу id KFC с помощью геттера
+        organizationHashtable.put(kFC.getID(), kFC); // VAl: то же самое, что и выше
+        organizationHashtable.put(waterSports.getID(), waterSports); // VAl:то же самое, что и выше
+        organizationHashtable.put(myNewBank.getID(), myNewBank); // VAl: то же самое, что и выше
+
+
+        String value = String.valueOf(organizationHashtable.get(dunkinDonuts.getID()));
+        String value2 = String.valueOf(organizationHashtable.get(kFC.getID()));
+        String value3 = String.valueOf(organizationHashtable.get(waterSports.getID()));
+        String value4 = String.valueOf(organizationHashtable.get(myNewBank.getID()));
+        System.out.println(value + value2 + value3 + value4);
+
+        do {
+            /* VAl: создание цикла do, который будет вмещать в себя switch case для работы с программой,
+            после выбора команды и срабатывания определённого кейса, будет водить программу по кругу */
 
             System.out.println("Введите желаемую вами команду");
             chosenCommand = scanner.nextLine();
 
-            Hashtable<Long, Organization> hashtable = new Hashtable<>();
 
             switch (chosenCommand) {
                 case "help":
@@ -61,7 +69,7 @@ public class Commands {
                     break;
 
                 case "show":
-                    show();
+                    show(organizationHashtable);
                     break;
 
                 case "insert":
@@ -106,27 +114,31 @@ public class Commands {
                 "print_ascending : вывести элементы коллекции в порядке возрастания\n");
     }
 
-    public static void info () {
+    public static void info() {
         System.out.println("Метод для инфо");
     }
-    public static void show () {
-        System.out.println("Метод для show");
+
+    public static void show(Hashtable ht) {
+        System.out.println(ht.toString());
     }
-    public static void insert () {
+
+    public static void insert() {
         System.out.println("Метод для insert");
     }
-    public static void updateID () {
+
+    public static void updateID() {
         System.out.println("Метод для updateID");
     }
-    public static void removeKey () {
+
+    public static void removeKey() {
         System.out.println("Метод для removeKey");
     }
 
-    public static void clear () {
+    public static void clear() {
         System.out.println("Метод для clear");
     }
 
-    public static void replaceIfGreater () {
+    public static void replaceIfGreater() {
         System.out.println("Метод для replaceIfGreater");
     }
 

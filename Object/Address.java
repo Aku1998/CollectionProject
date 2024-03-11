@@ -15,7 +15,7 @@ public class Address {
         this.street = street;
     }
 
-    public String toString (){
+    public String toString() {
         return this.street;
     }
 

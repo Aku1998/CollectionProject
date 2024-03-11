@@ -1,6 +1,6 @@
 package CollectionProject.Object;
 
-public class Organization{
+public class Organization {
     private static long counter;
     private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным,
     // Значение этого поля должно генерироваться автоматически
@@ -11,29 +11,23 @@ public class Organization{
 
     public Organization(String name, long employeesCount, OrganizationType type, Address postalAddress) {
         Organization.counter++;
-        this.id = 400 + Organization.counter;
+        this.id = Organization.counter;
         this.name = name;
         this.employeesCount = employeesCount;
         this.type = type;
         this.postalAddress = postalAddress;
     }
 
-    public String toString() {
+    public long getID() {
+        return id;
+    }
 
-        if (this.postalAddress == null) {
-            return "Название организации: " + this.name + ".\n" +
-                    "Количество рабочих: " + this.employeesCount + ".\n" +
-                    "Тип организации: " + this.type + ".\n" +
-                    "Адрес отсутствует. " + "\n" +
-                    "ID организации: " + this.id + "." +
-                    "-----------------------------------------------------------------\n\n";
-        } else {
-            return "Название организации: " + this.name + ".\n" +
-                    "Количество рабочих: " + this.employeesCount + ".\n" +
-                    "Тип организации: " + this.type + ".\n" +
-                    "Адрес: " + this.postalAddress + ".\n" +
-                    "ID организации: " + this.id + "."+
-                    "-----------------------------------------------------------------\n\n";
-        }
+    public String toString() {
+        return "ID организации: " + this.id + ".\n" +
+                "Название организации: " + this.name + ".\n" +
+                "Количество рабочих: " + this.employeesCount + ".\n" +
+                "Тип организации: " + this.type.getOrgType() + ".\n" +
+                "Адрес: " + this.postalAddress + ".\n" +
+                "-----------------------------------------------------------------\n";
     }
 }
