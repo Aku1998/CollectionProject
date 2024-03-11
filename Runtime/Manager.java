@@ -1,10 +1,18 @@
 package CollectionProject.Runtime;
 
+import CollectionProject.Object.MutableField;
+import CollectionProject.Object.Organization;
+import CollectionProject.Object.OrganizationType;
+
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.Scanner;
 
 
 public class Manager {
     Scanner scanner;
+
+    Map<Long, Organization> map;
 
     public static void defaultError() {
         System.out.println("Вы ввели неверные данные, прошу, проверьте вашу команду на наличие " +
@@ -84,6 +92,67 @@ public class Manager {
                 continue;
             }
             return addressLine;
+        }
+    }
+
+    public void updateById(String id) {
+        if (!Utils.isInt(id)) {
+            System.out.println("Значение id неправильное");
+            return;
+        }
+        long idValue = Long.parseLong(id);
+
+        Organization org = this.map.get(idValue);
+        if (org == null) {
+            System.out.println("Такого id нет");
+            return;
+        }
+
+        // нижележащий код должен быть в цикле и должно повторяться если указанно что то некорректно
+        // (вмето return должен быть continue или аналогичная логика)
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Доступные поля для изменения:");
+        for (MutableField field : MutableField.values()) {
+            System.out.println(field);
+        }
+        System.out.print("Введите ответ: ");
+        String answer = scanner.nextLine();
+        if (!Utils.isEnum(answer, MutableField.class)) {
+            System.out.println("Указанно некорректное поле для изменения");
+            return;
+        }
+        MutableField answerValue = MutableField.valueOf(answer);
+
+        System.out.print("Введите новое: ");
+        String newValue = scanner.nextLine();
+
+        switch (answerValue) {
+            case NAME:
+                if (newValue.isEmpty()) {
+                    System.out.println("Указанно некорректное новое значение");
+                    return;
+                }
+                org.setName(newValue);
+                break;
+            case TYPE:
+                if (!Utils.isEnum(newValue, OrganizationType.class)) {
+                    System.out.println("Указанно некорректное новое значение");
+                    return;
+                }
+                OrganizationType orgType = OrganizationType.valueOf(newValue);
+                org.setType(orgType);
+                break;
+            case EMPLOYEES_COUNT:
+                if (!Utils.isInt(newValue)) {
+                    System.out.println("Указанно некорректное новое значение");
+                    return;
+                }
+                Long employeesCount = Long.valueOf(newValue);
+                org.setEmployeesCount(employeesCount);
+                break;
+            case ADDRESS_STREET:
+                // ...
+                break;
         }
     }
 

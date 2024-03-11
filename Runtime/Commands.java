@@ -1,7 +1,9 @@
 package CollectionProject.Runtime;
 
 import CollectionProject.Object.Address;
+import CollectionProject.Object.MutableField;
 import CollectionProject.Object.Organization;
+import CollectionProject.Object.OrganizationType;
 
 import java.util.*;
 
@@ -20,18 +22,13 @@ public class Commands {
         Scanner scanner = new Scanner(System.in); // VAl: создание сканера для считывания пользовательского ввода
         String chosenCommand; // VAl: инициализация String, чтобы тот был виден в switch case'ах
 
-        /* VAL: для того, чтобы конструктор работал корректно вместе с полем postalAddress, т.к. это является отдельным
-            классом и строка street является отдельным экземпляром этого класса, нам нужно, собственно, создать объект класса
-            Адрес и позже уже вложить его в конструкт нашего класса Организации и объект организации
-             */
+        /* VAL: для того, чтобы конструктор работал корректно вместе с полем postalAddress, т.к. это является объектом другого класса,
+        нам нужно вместо обычной строки писать в конструктор, например, вместо просто строки "Город Пушкин, улица Колотушкина",
+        писать new Address ("Город Пушкин, улица Колотушкина"), воооот */
 
-        Address dunkinDonutsAddress = new Address("Город Пушкин, улица Колотушкина");  // тут создаётся объект Адреса с нужным нам адресом
-        Organization dunkinDonuts = new Organization("Dunkin Donuts", 66, PUBLIC, dunkinDonutsAddress); // сюда в Организацию он и вставляется, ну и так со всеми
-
+        Organization dunkinDonuts = new Organization("Dunkin Donuts", 66, PUBLIC, new Address("Город Пушкин, улица Колотушкина")); // сюда в Организацию он и вставляется, ну и так со всеми
         Organization kFC = new Organization("KFC", 99, OPEN_JOINT_STOCK_COMPANY, null);
-
-        Address waterSportsAddress = new Address("Город Кульма, улица Улиткина");
-        Organization waterSports = new Organization("Water Sports", 22, PUBLIC, waterSportsAddress);
+        Organization waterSports = new Organization("Water Sports", 22, PUBLIC, new Address("Город Кульма, улица Улиткина"));
 
         Address myNewBankAddress = new Address("Город Рига, улица Тескана");
         Organization myNewBank = new Organization("My New Bank", 39, TRUST, myNewBankAddress);
@@ -141,5 +138,4 @@ public class Commands {
     public static void replaceIfGreater() {
         System.out.println("Метод для replaceIfGreater");
     }
-
 }
