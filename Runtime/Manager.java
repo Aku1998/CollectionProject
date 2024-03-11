@@ -25,16 +25,16 @@ public class Manager {
     }
 
     // я не знаю, будет ли это работать и нужно ли это, но я это сделала, потом можно это поменять/удалить, воооот
-    public static boolean isStr(int number) {
-        try {  // блок с которого все начнется тут
-            // если завершится с ошибкой, то перейдет в catche блок
-            Integer.toString(number);
-            // если предыдущая строка успешно отработала, то возвращаем true
-            return true;
-        } catch (Exception e) {
-            return false; // если попали в catch, то возвращаем false
-        }
-    }
+//    public static boolean isStr(int number) {
+//        try {  // блок с которого все начнется тут
+//            // если завершится с ошибкой, то перейдет в catche блок
+//            Integer.toString(number);
+//            // если предыдущая строка успешно отработала, то возвращаем true
+//            return true;
+//        } catch (Exception e) {
+//            return false; // если попали в catch, то возвращаем false
+//        }
+//    }
 
 //    public int getHouseYear() {
 //        while (true) {
@@ -55,7 +55,7 @@ public class Manager {
 //        }
 //    }
 
-    public int getEmployeeNumber() {
+    public int getEmployeeNumberFromUser() {
         while (true) {
             System.out.print("Введите кол-во работников: ");
             String line = scanner.nextLine();
@@ -64,17 +64,17 @@ public class Manager {
                 System.out.println("Это не число");
                 continue;
             }
-            int roomNumber = Integer.parseInt(line);
+            int employeeNumber = Integer.parseInt(line);
 
-            if (roomNumber > 0) {
-                return roomNumber;
+            if (employeeNumber > 0) {
+                return employeeNumber;
             }
 
             System.out.println("Не может быть пустым");
         }
     }
 
-    public String getAddress() {
+    public String getAddressFromUser() {
         while (true) {
             System.out.print("Введите адрес организации: ");
             String addressLine = scanner.nextLine();

@@ -1,8 +1,9 @@
 package CollectionProject.Object;
 
-public class Organization {
+public class Organization{
     private static long counter;
-    private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
+    private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным,
+    // Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Long employeesCount; //Поле не может быть null, Значение поля должно быть больше 0
     private OrganizationType type; //Поле может быть null
@@ -16,11 +17,23 @@ public class Organization {
         this.type = type;
         this.postalAddress = postalAddress;
     }
+
+    public String toString() {
+
+        if (this.postalAddress == null) {
+            return "Название организации: " + this.name + ".\n" +
+                    "Количество рабочих: " + this.employeesCount + ".\n" +
+                    "Тип организации: " + this.type + ".\n" +
+                    "Адрес отсутствует. " + "\n" +
+                    "ID организации: " + this.id + "." +
+                    "-----------------------------------------------------------------\n\n";
+        } else {
+            return "Название организации: " + this.name + ".\n" +
+                    "Количество рабочих: " + this.employeesCount + ".\n" +
+                    "Тип организации: " + this.type + ".\n" +
+                    "Адрес: " + this.postalAddress + ".\n" +
+                    "ID организации: " + this.id + "."+
+                    "-----------------------------------------------------------------\n\n";
+        }
+    }
 }
-
-
-    /*
-    Потом нужно будет сделать REFACTOR этого класса под имя клавного объекта, с которым будем работать, вот
-    Мб в будущем нужно сделать отдельные классы для класса/конструктора/методов для всего остального здесь,
-    если понадобится
-    */
