@@ -6,30 +6,25 @@ import CollectionProject.Object.Organization;
 import java.util.Hashtable;
 import java.util.Scanner;
 
-import static CollectionProject.Object.OrganizationType.PUBLIC;
+import static CollectionProject.Object.OrganizationType.*;
 import static CollectionProject.Runtime.Manager.defaultError;
 
 public class Commands {
 
-    public static void runProgram() {  // главный метод, который будет запускаться в main и будет проводить всю работу программы
+    public static void runProgram() {  // VAl: главный метод, который будет запускаться в main и будет проводить всю работу программы
         System.out.println("Добро пожаловать в Collection Project!\n" +
                 "Для выхода из программы введите 'exit', для ознакомления со " +
                 "всеми доступными командами введите 'help'");
 
-        Scanner scanner = new Scanner(System.in); // создание сканера для считывания пользовательского ввода
-        String chosenCommand; // инициализация String, чтобы тот был виден в switch case'ах
+        Scanner scanner = new Scanner(System.in); // VAl: создание сканера для считывания пользовательского ввода
+        String chosenCommand; // VAl: инициализация String, чтобы тот был виден в switch case'ах
 
         do {
-            /* создание цикла do, который будет вмещать в себя switch case для работы с программой,
+            /* VAl: создание цикла do, который будет вмещать в себя switch case для работы с программой,
             после выбора команды и срабатывания определённого кейса, будет водить программу по кругу */
 
-            System.out.println("Введите желаемую вами команду");
-            chosenCommand = scanner.nextLine();
 
-            Hashtable<Long, Organization> hashtable = new Hashtable<>();
-
-
-            /* Val: для того, чтобы конструктор работал корректно вместе с полем postalAddress, т.к. это является отдельным
+            /* VAL: для того, чтобы конструктор работал корректно вместе с полем postalAddress, т.к. это является отдельным
             классом и строка street является отдельным экземпляром этого класса, нам нужно, собственно, создать объект класса
             Адрес и позже уже вложить его в конструкт нашего класса Организации и объект организации
              */
@@ -37,18 +32,24 @@ public class Commands {
             Address dunkinDonutsAddress = new Address("Город Пушкин, улица Колотушкина");  // тут создаётся объект Адреса с нужным нам адресом
             Organization dunkinDonuts = new Organization("Dunkin Donuts", 66, PUBLIC, dunkinDonutsAddress); // сюда в Организацию он и вставляется, ну и так со всеми
 
-            Organization kFC = new Organization("KFC", 99, PUBLIC, null); // т.к. тут поле является null, то создавать адрес под него не нужно
+            // VAl: Т.к. тут поле является null, то создавать адрес под него не нужно
+            Organization kFC = new Organization("KFC", 99, OPEN_JOINT_STOCK_COMPANY, null);
 
             Address waterSportsAddress = new Address("Город Кульма, улица Улиткина");
-            Organization waterSports = new Organization("KFC", 99, PUBLIC, null);
+            Organization waterSports = new Organization("KFC", 22, PUBLIC, waterSportsAddress);
 
             Address myNewBankAddress = new Address("Город Рига, улица Тескана");
-            Organization myNewBank = new Organization("My New Bank", 99, PUBLIC, null);
+            Organization myNewBank = new Organization("My New Bank", 39, TRUST, myNewBankAddress);
 
             System.out.println(kFC);
             System.out.println(dunkinDonuts);
             System.out.println(waterSports);
             System.out.println(myNewBank);
+
+            System.out.println("Введите желаемую вами команду");
+            chosenCommand = scanner.nextLine();
+
+            Hashtable<Long, Organization> hashtable = new Hashtable<>();
 
             switch (chosenCommand) {
                 case "help":
