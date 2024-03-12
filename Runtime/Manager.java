@@ -4,9 +4,7 @@ import CollectionProject.Object.MutableField;
 import CollectionProject.Object.Organization;
 import CollectionProject.Object.OrganizationType;
 
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 import static CollectionProject.Runtime.Utils.isInt;
 
@@ -15,8 +13,35 @@ public class Manager {
     Scanner scanner;
     Map<Long, Organization> map;
 
-    Manager(){
+    @Override
+    public String toString() {
+        return "Manager{" +
+                "map=" + map +
+                '}';
+    }
+
+    Manager() {
         this.map = new Hashtable<>();
+    }
+
+    public static void greetings() {
+        System.out.println(
+                "Выберите команду из списка. Для полного списка команд введите 'help'.\n" +
+                        "Для выхода из программы введите 'exit'.\n" +
+                        "В методах с {такими} {скобками} после названия введите числовое значение,\n" +
+                        "при этом разделив их одним пробелом\n " +
+                        "--------------------------------------------------------------------------------\n" +
+                        "help\n" +
+                        "info\n" +
+                        "show\n" +
+                        "insert\n" +
+                        "update {id}\n" +
+                        "remove_key {id}\n" +
+                        "clear\n" +
+                        "exit\n" +
+                        "remove_greater {fieldValue}\n" +
+                        "remove_lower {fieldValue}\n" +
+                        "count_less_than_genre {genre}\n");
     }
 
     public static void defaultError() {
@@ -39,12 +64,22 @@ public class Manager {
                 "print_ascending : вывести элементы коллекции в порядке возрастания\n");
     }
 
-    public static void info() {
-        System.out.println("Метод для инфо");
+    public static void info(Hashtable hashtable) {
+        Set set = hashtable.entrySet();
+
+        Iterator i = set.iterator(); // создаю итератор, который будет проходиться по всей Map'е
+
+        while (i.hasNext()) {  // создаю метод, который считывает кол-во элементов в таблице
+            Map.Entry example = (Map.Entry) i.next();
+            System.out.print(example.getKey() + ": ");
+            System.out.println(example.getValue());
+        }
+        System.out.println("Таблица хешов состоит из объектов Организаций\n" +
+                "На данный момент в таблице находится " + hashtable.size() + " организации_й\n");
     }
 
-    public static void show(Hashtable ht) {
-        System.out.println(ht.toString());
+    public static void show(Hashtable<Long, Organization> map) {
+        System.out.println(map);
     }
 
     public static void insert() {
@@ -63,9 +98,33 @@ public class Manager {
         System.out.println("Метод для clear");
     }
 
-    public static void replaceIfGreater() {
-        System.out.println("Метод для replaceIfGreater");
+    public static void replaceIfGreater(Hashtable hashtable, String argsIn) {   // VAL: этот метод ещё в разработке, но пока что так
+        Integer.valueOf(argsIn);
+        Set set = hashtable.entrySet();
+
+        Iterator i = set.iterator(); // создаю итератор, который будет проходиться по всей Map'е
+
+        while (i.hasNext()) {  // создаю метод, который считывает кол-во элементов в таблице
+            Map.Entry example = (Map.Entry) i.next();
+            System.out.print(example.getKey() + ": ");
+            System.out.println(example.getValue());
+        }
     }
+//    public void removeByGreaterKey(Hashtable hashtable, String argsIn) {
+//        Long.valueOf(argsIn);
+//        Set set = hashtable.entrySet();
+//        Organization.getID();
+//
+//        Iterator i = set.iterator(); // создаю итератор, который будет проходиться по всей Map'е
+//
+//        while (i.hasNext()) {  // создаю метод, который считывает кол-во элементов в таблице
+//            Map.Entry example = (Map.Entry) i.next();
+//            if (Organization.this.getID() > argsIn) {
+//                map.remove(Organization.getID());
+//            }
+//        }
+//    }
+
 
     public void updateById(String id) {
         if (!isInt(id)) {
@@ -80,8 +139,8 @@ public class Manager {
             return;
         }
 
-        // нижележащий код должен быть в цикле и должно повторяться если указанно что то некорректно
-        // (вмето return должен быть continue или аналогичная логика)
+        // нижележащий код должен быть в цикле и должно повторяться если указанно, что-то некорректно
+        // (вместо return должен быть continue или аналогичная логика)
         Scanner scanner = new Scanner(System.in);
         System.out.println("Доступные поля для изменения:");
         for (MutableField field : MutableField.values()) {

@@ -1,6 +1,6 @@
 package CollectionProject.Object;
 
-public class Organization {
+public class Organization implements Comparable<Organization> {
     private static long counter;
     private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным
                     // Значение этого поля должно генерироваться автоматически
@@ -19,7 +19,8 @@ public class Organization {
     }
 
     public String toString() {
-        return "ID организации: " + this.id + ".\n" +
+        return "\n" +
+                "ID организации: " + this.id + ".\n" +
                 "Название организации: " + this.name + ".\n" +
                 "Количество рабочих: " + this.employeesCount + ".\n" +
                 "Тип организации: " + this.type.getOrgType() + ".\n" +
@@ -27,6 +28,7 @@ public class Organization {
                 "-----------------------------------------------------------------\n";
     }
 
+    // VAL: тут все геттеры и сеттеры, чтобы в будущем можно было использовать без проблем при случае
     public long getID() {
         return id;
     }
@@ -63,4 +65,13 @@ public class Organization {
         this.postalAddress = postalAddress;
     }
 
+    @Override  // метод интерфейса Comparable, который понадобится в методе replace_if_greater {id}
+    public int compareTo(Organization object) {
+        if (this.employeesCount < object.employeesCount) {
+            return -1;
+        } else if (this.employeesCount > object.employeesCount) {
+            return 1;
+        }
+        return 0;
+    }
 }
