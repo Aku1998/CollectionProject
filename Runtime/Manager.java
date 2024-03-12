@@ -40,10 +40,10 @@ public class Manager {
                         "update {id}\n" +
                         "remove_key {id}\n" +
                         "clear\n" +
-                        "exit\n" +
-                        "remove_greater {fieldValue}\n" +
-                        "remove_lower {fieldValue}\n" +
-                        "count_less_than_genre {genre}\n");
+                        "replace_if_greater {id}\n" +
+                        "remove_greater_key {id}\n" +
+                        "max_by_id \n" +
+                        "count_greater_than_type {type} \n");
     }
 
     public static void defaultError() {
