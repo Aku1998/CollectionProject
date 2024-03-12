@@ -92,6 +92,16 @@ public class Main {
                     break;
 
                 case "remove_by_greater {key}":
+                    Manager.replaceIfGreater(organizationHashtable, argsIn);
+                    break;
+
+                case "max_by_id":
+                    Manager.maxByID();
+                    break;
+
+                case "count_greater_than_type {type}":
+                    Manager.countGreaterThanType();
+                    break;
 
                 default:
                     Manager.defaultError();

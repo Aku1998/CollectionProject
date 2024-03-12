@@ -1,5 +1,6 @@
 package CollectionProject.Runtime;
 
+import CollectionProject.Object.Address;
 import CollectionProject.Object.MutableField;
 import CollectionProject.Object.Organization;
 import CollectionProject.Object.OrganizationType;
@@ -7,11 +8,12 @@ import CollectionProject.Object.OrganizationType;
 import java.util.*;
 
 import static CollectionProject.Runtime.Utils.isInt;
+import static CollectionProject.Runtime.Utils.isLong;
 
 
 public class Manager {
-    Scanner scanner;
-    Map<Long, Organization> map;
+    static Scanner scanner;
+    static Map<Long, Organization> map;
 
     @Override
     public String toString() {
@@ -82,8 +84,41 @@ public class Manager {
         System.out.println(map);
     }
 
-    public static void insert() {
-        System.out.println("Метод для insert");
+    public static Organization insert(){ // Akmoor
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите имя: ");;
+        String name= scanner.nextLine();
+        System.out.println("Введите количество сотрудников: ");
+        Long employeesCount= scanner.nextLong();
+        System.out.println("Выберите тип организации: 1 PUBLIC, 2 OPEN_JOINT_STOCK_COMPANY,3 TRUST ");
+        getNewElement(scanner);
+        System.out.println("Введите адрес: ");
+        address(scanner);
+
+        Organization organization=new Organization(name,employeesCount,getNewElement(scanner),address(scanner));
+
+        System.out.println(organization);
+        return insert() ;
+
+    }
+    public static OrganizationType getNewElement(Scanner scanner){  // Akmoor
+        int choice=scanner.nextInt();
+        scanner.nextLine();
+        switch (choice){
+            case 1:
+                return OrganizationType.PUBLIC;
+            case  2:
+                return OrganizationType.TRUST;
+            case 3:
+                return OrganizationType.OPEN_JOINT_STOCK_COMPANY;
+            default: System.out.println("Повторите еще раз");       }
+
+        return null ;
+    }
+    public static Address address(Scanner scanner){ // Akmoor
+        String address=scanner.nextLine();
+        System.out.println(address);
+        return null;
     }
 
     public static void updateID() {
@@ -100,6 +135,10 @@ public class Manager {
 
     public static void replaceIfGreater(Hashtable hashtable, String argsIn) {   // VAL: этот метод ещё в разработке, но пока что так
         Integer.valueOf(argsIn);
+        if (!isInt(argsIn)) {
+            System.out.println("Значение id неправильное");
+            return;
+        }
         Set set = hashtable.entrySet();
 
         Iterator i = set.iterator(); // создаю итератор, который будет проходиться по всей Map'е
@@ -110,8 +149,11 @@ public class Manager {
             System.out.println(example.getValue());
         }
     }
-//    public void removeByGreaterKey(Hashtable hashtable, String argsIn) {
-//        Long.valueOf(argsIn);
+//    public void removeByGreaterKey (Hashtable hashtable, String argsIn) {
+//        if (!isLong(argsIn)) {
+//            System.out.println("Значение id неправильное");
+//            return;
+//        }
 //        Set set = hashtable.entrySet();
 //        Organization.getID();
 //
@@ -119,7 +161,7 @@ public class Manager {
 //
 //        while (i.hasNext()) {  // создаю метод, который считывает кол-во элементов в таблице
 //            Map.Entry example = (Map.Entry) i.next();
-//            if (Organization.this.getID() > argsIn) {
+//            if (Organization.getID() > argsIn) {
 //                map.remove(Organization.getID());
 //            }
 //        }
@@ -185,6 +227,38 @@ public class Manager {
                 // ...
                 break;
         }
+    }
+
+    public static void countGreaterThanType(){
+        System.out.println("Введите команду: ");
+        String cmd = scanner.nextLine(); // count_greater_than_type TRUST
+        cmd = cmd.split(" ")[0];
+        String argIn = cmd.split(" ")[1];
+// проверка аргумента
+        if (!Utils.isEnum(argIn, OrganizationType.class)) {
+            System.out.println("Указанно некорректное значение");
+            return;
+        }
+        OrganizationType targetType = OrganizationType.valueOf(argIn);
+// логика команды
+        int counter = 0;
+        for (Organization organization : map.values()) {
+            if (organization.getType().ordinal() > targetType.ordinal()) {
+                counter = counter + 1;
+            }
+        }
+        System.out.println("Количество: " + counter);
+
+    };
+
+    public static void maxByID() {
+        long maxId = -1;
+        for (Organization org : map.values()) {
+            if (org.getID() > maxId) {
+                maxId = org.getID();
+            }
+        }
+        System.out.println(map.get(maxId));
     }
 
     public int getEmployeeNumberFromUser() {
