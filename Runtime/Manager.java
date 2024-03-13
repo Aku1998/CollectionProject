@@ -30,7 +30,7 @@ public class Manager {
                 "Выберите команду из списка. Для полного списка команд введите 'help'.\n" +
                         "Для выхода из программы введите 'exit'.\n" +
                         "В методах с {такими} {скобками} после названия введите числовое значение,\n" +
-                        "при этом разделив их одним пробелом\n " +
+                        "при этом разделив их одним пробелом.\n " +
                         "--------------------------------------------------------------------------------\n" +
                         "help\n" +
                         "info\n" +
@@ -52,30 +52,19 @@ public class Manager {
     }
 
     public static void help() {
-        System.out.println("help: вывести описание всех команд \n" +
-                "info : информация о коллекции\n" +
-                "add : добавить новый элемент в коллекцию (спросить про значение каждого поля)\n" +
-                "update_by_id {id}: обновить значение элемента коллекции, id которого равен заданному\n" +
-                "remove_by_id {id} : удалить элемент из коллекции по его id\n" +
-                "clear : очистить коллекцию\n" +
-                "exit : завершить программу\n" +
-                "remove_head : вывести первый элемент коллекции и удалить его\n" +
-                "history : вывести последние 15 команд (без их аргументов)\n" +
-                "filter_less_than_balcony balcony : вывести элементы, значение поля balcony которых меньше заданного\n" +
-                "print_ascending : вывести элементы коллекции в порядке возрастания\n");
+        System.out.println("help: вывод пояснения всех команд.\n" +
+                "info: вывод информации о коллекции и кол-во её элементов.\n" +
+                "show: вывод всех элементов коллекции.\n" +
+                "insert: создание нового элемента коллекции\n" +
+                "update {id}: создание нового элемента коллекции по заданному ID\n" +
+                "remove_key {id}: удаление элемента коллекции по заданному ID\n" +
+                "clear: удаление всех элементов коллекции\n" +
+                "replace_if_greater {id}: замена элемента коллекции, если значение работников больше\n" +
+                "       старого элемента коллекции по заданному ID\n" +
+                "remove_greater_key {id}: удаление всех элементов, ID которых меньше заданного значения\n" +
+                "max_by_id: вывод элемента с самым высоким значением ID \n" +
+                "count_greater_than_type {type}: подсчёт кол-ва элементов, чей тип больше заданного");
     }
-
-//    public static void info(Hashtable hashtable) {
-//        Set set = hashtable.entrySet();
-//
-//        Iterator i = set.iterator(); // создаю итератор, который будет проходиться по всей Map'е
-//
-//        while (i.hasNext()) {  // создаю метод, который считывает кол-во элементов в таблице
-//            Map.Entry example = (Map.Entry) i.next();
-//        }
-//        System.out.println("Таблица хешов состоит из объектов Организаций\n" +
-//                "На данный момент в таблице находится " + hashtable.size() + " организации_й\n");
-//    }
 
     public static void info(Hashtable hashtable) {
         Set set = hashtable.entrySet();
@@ -95,7 +84,7 @@ public class Manager {
         }
     }
 
-    private String readName() {
+    private static String readName() {
         String name;
 
         do {
@@ -110,7 +99,7 @@ public class Manager {
     }
 
 
-    private Long readEmployeesCount() {
+    private static Long readEmployeesCount() {
         String employeesCount;
 
         do {
@@ -124,14 +113,14 @@ public class Manager {
         } while (true);
     }
 
-    public OrganizationType readTypeOrganization() {
+    public static OrganizationType readTypeOrganization() {
         System.out.println("Выберите тип организации: 1 PUBLIC, 2 OPEN_JOINT_STOCK_COMPANY,3 TRUST ");
         getNewElement(scanner);
 
         return null;
     }
 
-    public String readAddress() {
+    public static String readAddress() {
         String addressLine;
 
         while (true) {
@@ -147,7 +136,7 @@ public class Manager {
     }
 
 
-    public void insert() { // добавить новый элемент с заданным ключом
+    public static void insert() { // добавить новый элемент с заданным ключом
         System.out.println("Запущена команда добавления новой организации, введите данные.");
 
         String name = readName();
@@ -158,7 +147,6 @@ public class Manager {
         map.put(organization.getID(), organization);
         System.out.println("The new organization inserted");
         System.out.println(organization);
-
     }
 
     public static OrganizationType getNewElement(Scanner scanner) {
@@ -184,11 +172,6 @@ public class Manager {
         return null;
     }
 
-    public static void updateID() {
-        System.out.println("Метод для updateID");
-    }
-
-
     public static void removeKey(String element) {
 
         if (!Utils.isInt(String.valueOf(element))) {
@@ -209,20 +192,32 @@ public class Manager {
     }
 
     public static void replaceIfGreater(Hashtable hashtable, String argsIn) {   // VAL: этот метод ещё в разработке, но пока что так
-        Integer.valueOf(argsIn);
         if (!isInt(argsIn)) {
             System.out.println("Введённые аргументы указаны неверно.");
             return;
         }
-        Set set = hashtable.entrySet();
+        System.out.println("Запущена команда добавления новой организации, введите данные.");
 
-        Iterator i = set.iterator(); // создаю итератор, который будет проходиться по всей Map'е
+        String name = readName();
+        Long employeesCount = readEmployeesCount();
+        OrganizationType organizationType = readTypeOrganization();
+        Address address = new Address(readAddress());
 
-        while (i.hasNext()) {  // создаю метод, который считывает кол-во элементов в таблице
-            Map.Entry example = (Map.Entry) i.next();
-            System.out.print(example.getKey() + ": ");
-            System.out.println(example.getValue());
+        Organization newOrg = new Organization(name, employeesCount, organizationType, address);
+
+        Organization oldOrg = (Organization) hashtable.get(argsIn);
+        if (newOrg.compareTo(oldOrg) < 0) {
+            System.out.println("Значение кол-ва работников новой организации меньше старой организации." +
+                    "Попробуйте ещё раз, изменив значение новой организации.");
+            return;
+        } else if (newOrg.compareTo(oldOrg) > 0) {
+            map.remove(oldOrg.getID());
+            map.put(newOrg.getID(), newOrg);
+        } else if (newOrg.compareTo(oldOrg) == 0) {
+            System.out.println("Обе организации имеют одинаковое кол-во работников." +
+                    "Попробуйте ещё раз, изменив значение новой организации.");
         }
+
     }
 
     public static void removeByGreaterKey(String argsIn) {

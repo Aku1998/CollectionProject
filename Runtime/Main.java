@@ -85,9 +85,9 @@ public class Main {
                     Manager.show(organizationHashtable);
                     break;
 
-//                case "insert":
-//                    Manager.insert();
-//                    break;
+                case "insert":
+                    Manager.insert();
+                    break;
 
                 case "updateID":
                     Manager.updateById(argsIn);
