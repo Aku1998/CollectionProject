@@ -27,16 +27,30 @@ public class Main {
         писать new Address ("Город Пушкин, улица Колотушкина"), воооот */
 
         Organization dunkinDonuts = new Organization("Dunkin Donuts", 66, PUBLIC, new Address("Город Пушкин, улица Колотушкина"));
-        // VAL: сюда в Организацию он и вставляется, ну и так со всеми
         Organization kFC = new Organization("KFC", 99, OPEN_JOINT_STOCK_COMPANY, null);
         Organization waterSports = new Organization("Water Sports", 22, PUBLIC, new Address("Город Кульма, улица Улиткина"));
-
-        Address myNewBankAddress = new Address("Город Рига, улица Тескана");
-        Organization myNewBank = new Organization("My New Bank", 39, TRUST, myNewBankAddress);
+        Organization motorolaSolutions = new Organization("Motorola Solutions", 23, OPEN_JOINT_STOCK_COMPANY, new Address("Город Рига, улица Тескана"));
+        Organization enterpriseProductsPartners = new Organization("Enterprise Products Partners", 101, TRUST, new Address("Город Златоуст, улица Спортивная"));
+        Organization southern = new Organization("Southern", 55, OPEN_JOINT_STOCK_COMPANY, new Address("Город Рига, улица Тескана"));
+        Organization alphabet = new Organization("Alphabet", 66, PUBLIC, new Address("Город Домодедово, улица Речная "));
+        Organization gap = new Organization("Gap", 64, TRUST, new Address("Город Булькано, улица Мясистая"));
+        Organization rRDAndS = new Organization("R.R. Donnelley & Sons", 78, TRUST, new Address("Город Утана, улица Пекаря"));
+        Organization ascenaRetailGroup = new Organization("Ascena Retail Group", 61, PUBLIC, new Address("Город Сегиль, улица Холи"));
+        Organization cSX = new Organization("CSX", 93, OPEN_JOINT_STOCK_COMPANY, new Address("Город Грейс, улица Святой Присциллы"));
+        Organization myNewBank = new Organization("My New Bank", 75, TRUST, new Address("Город Акоста, улица Оборонительная"));
 
         organizationHashtable.put(dunkinDonuts.getID(), dunkinDonuts); // VAl: кладём в таблицу id KFC с помощью геттера
         organizationHashtable.put(kFC.getID(), kFC); // VAl: то же самое, что и выше
         organizationHashtable.put(waterSports.getID(), waterSports); // VAl:то же самое, что и выше
+        organizationHashtable.put(myNewBank.getID(), myNewBank); // VAl: то же самое, что и выше
+        organizationHashtable.put(motorolaSolutions.getID(), motorolaSolutions); // VAl: то же самое, что и выше
+        organizationHashtable.put(enterpriseProductsPartners.getID(), enterpriseProductsPartners); // VAl: то же самое, что и выше
+        organizationHashtable.put(alphabet.getID(), alphabet); // VAl: то же самое, что и выше
+        organizationHashtable.put(southern.getID(), southern); // VAl: то же самое, что и выше
+        organizationHashtable.put(gap.getID(), gap); // VAl: то же самое, что и выше
+        organizationHashtable.put(rRDAndS.getID(), rRDAndS); // VAl: то же самое, что и выше
+        organizationHashtable.put(ascenaRetailGroup.getID(), ascenaRetailGroup); // VAl: то же самое, что и выше
+        organizationHashtable.put(cSX.getID(), cSX); // VAl: то же самое, что и выше
         organizationHashtable.put(myNewBank.getID(), myNewBank); // VAl: то же самое, что и выше
 
         do {
@@ -71,12 +85,12 @@ public class Main {
                     Manager.show(organizationHashtable);
                     break;
 
-                case "insert":
-                    Manager.insert();
-                    break;
+//                case "insert":
+//                    Manager.insert();
+//                    break;
 
                 case "updateID":
-                    Manager.updateID();
+                    Manager.updateById(argsIn);
                     break;
 
                 case "removeKey":
@@ -92,7 +106,7 @@ public class Main {
                     break;
 
                 case "remove_by_greater {key}":
-                    Manager.replaceIfGreater(organizationHashtable, argsIn);
+                    Manager.removeByGreaterKey(argsIn);
                     break;
 
                 case "max_by_id":

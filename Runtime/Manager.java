@@ -65,6 +65,18 @@ public class Manager {
                 "print_ascending : вывести элементы коллекции в порядке возрастания\n");
     }
 
+//    public static void info(Hashtable hashtable) {
+//        Set set = hashtable.entrySet();
+//
+//        Iterator i = set.iterator(); // создаю итератор, который будет проходиться по всей Map'е
+//
+//        while (i.hasNext()) {  // создаю метод, который считывает кол-во элементов в таблице
+//            Map.Entry example = (Map.Entry) i.next();
+//        }
+//        System.out.println("Таблица хешов состоит из объектов Организаций\n" +
+//                "На данный момент в таблице находится " + hashtable.size() + " организации_й\n");
+//    }
+
     public static void info(Hashtable hashtable) {
         Set set = hashtable.entrySet();
 
@@ -72,15 +84,15 @@ public class Manager {
 
         while (i.hasNext()) {  // создаю метод, который считывает кол-во элементов в таблице
             Map.Entry example = (Map.Entry) i.next();
-            System.out.print(example.getKey() + ": ");
-            System.out.println(example.getValue());
         }
         System.out.println("Таблица хешов состоит из объектов Организаций\n" +
                 "На данный момент в таблице находится " + hashtable.size() + " организации_й\n");
     }
 
     public static void show(Hashtable<Long, Organization> map) {
-        System.out.println(map);
+        for (Organization org : map.values()) {
+            System.out.println(org);
+        }
     }
 
     private String readName() {
@@ -88,7 +100,7 @@ public class Manager {
 
         do {
             System.out.print("Введите имя: ");
-            name = this.scanner.nextLine();
+            name = scanner.nextLine();
             if (name.isEmpty()) {
                 System.out.println("имя не может быть пустой");
                 continue;
@@ -97,17 +109,18 @@ public class Manager {
         } while (true);
     }
 
-    private String readEmployeesCount() {
+
+    private Long readEmployeesCount() {
         String employeesCount;
 
         do {
             System.out.print("Введите колличество сотрудников: ");
-            employeesCount = this.scanner.nextLine();
+            employeesCount = scanner.nextLine();
             if (!Utils.isInt(employeesCount)) {
                 System.out.println("Количество сотрудников должно быть целочисленным значением");
                 continue;
             }
-            return String.valueOf(Long.parseLong(employeesCount));
+            return Long.parseLong(employeesCount);
         } while (true);
     }
 
@@ -138,10 +151,13 @@ public class Manager {
         System.out.println("Запущена команда добавления новой организации, введите данные.");
 
         String name = readName();
-        Long employeesCount = Long.valueOf(readEmployeesCount());
+        Long employeesCount = readEmployeesCount();
         OrganizationType organizationType = readTypeOrganization();
         Address address = new Address(readAddress());
         Organization organization = new Organization(name, employeesCount, organizationType, address);
+        map.put(organization.getID(), organization);
+        System.out.println("The new organization inserted");
+        System.out.println(organization);
 
     }
 
@@ -172,31 +188,30 @@ public class Manager {
         System.out.println("Метод для updateID");
     }
 
-    public static void removeKey(String element) {
-        Hashtable<Long, Object> longObjectHashtable = new Hashtable<>();
 
-        if (!Utils.isInt(element)) {
+    public static void removeKey(String element) {
+
+        if (!Utils.isInt(String.valueOf(element))) {
             System.out.println("Некорректный аргумент");
             return;
         }
 
-        long id = Long.parseLong(element);
-        if (longObjectHashtable.remove(id) == null) {
+        long id = Long.parseLong(String.valueOf(element));
+        if (map.remove(id) == null) {
             System.out.println("Не найдено");
         }
     }
 
 
     public static void clear() {
-        Hashtable<Long, Object> longObjectHashtable = new Hashtable<>();
-        longObjectHashtable.clear();
-        System.out.println("Коллекция очищен");
+        map.clear();
+        System.out.println("Коллекция очищена");
     }
 
     public static void replaceIfGreater(Hashtable hashtable, String argsIn) {   // VAL: этот метод ещё в разработке, но пока что так
         Integer.valueOf(argsIn);
         if (!isInt(argsIn)) {
-            System.out.println("Значение id неправильное");
+            System.out.println("Введённые аргументы указаны неверно.");
             return;
         }
         Set set = hashtable.entrySet();
@@ -209,83 +224,91 @@ public class Manager {
             System.out.println(example.getValue());
         }
     }
-//    public void removeByGreaterKey (Hashtable hashtable, String argsIn) {
-//        if (!isLong(argsIn)) {
-//            System.out.println("Значение id неправильное");
-//            return;
-//        }
-//        Set set = hashtable.entrySet();
-//        Organization.getID();
-//
-//        Iterator i = set.iterator(); // создаю итератор, который будет проходиться по всей Map'е
-//
-//        while (i.hasNext()) {  // создаю метод, который считывает кол-во элементов в таблице
-//            Map.Entry example = (Map.Entry) i.next();
-//            if (Organization.getID() > argsIn) {
-//                map.remove(Organization.getID());
-//            }
-//        }
-//    }
+
+    public static void removeByGreaterKey(String argsIn) {
+        if (!Utils.isLong(argsIn)) {
+            System.out.println("Введённые аргументы указаны неверно.");
+            return;
+        }
+
+        Long arg = Long.valueOf(argsIn);
+        Set<Long> set = new HashSet<>();
+
+        for (Long mapValue : map.keySet()) {
+            if (mapValue > arg) {
+                set.add(mapValue);
+            }
+        }
+
+        for (Long id : set) {
+            System.out.println("Вы успешно удалили " + map.get(id));
+            map.remove(id);
+        }
+
+    }
 
 
-    public void updateById(String id) {
-        if (!isInt(id)) {
+    public static void updateById(String id) {
+        if (!Utils.isInt(id)) {
             System.out.println("Значение id неправильное");
             return;
         }
         long idValue = Long.parseLong(id);
 
-        Organization org = this.map.get(idValue);
+        Organization org = map.get(idValue);
         if (org == null) {
             System.out.println("Такого id нет");
             return;
         }
-
-        // нижележащий код должен быть в цикле и должно повторяться если указанно, что-то некорректно
-        // (вместо return должен быть continue или аналогичная логика)
         Scanner scanner = new Scanner(System.in);
         System.out.println("Доступные поля для изменения:");
         for (MutableField field : MutableField.values()) {
             System.out.println(field);
         }
-        System.out.print("Введите ответ: ");
-        String answer = scanner.nextLine();
-        if (!Utils.isEnum(answer, MutableField.class)) {
-            System.out.println("Указанно некорректное поле для изменения");
-            return;
-        }
-        MutableField answerValue = MutableField.valueOf(answer);
+        while (true) {
+            System.out.print("Введите ответ: ");
+            String answer = scanner.nextLine();
+            if (!Utils.isEnum(answer, MutableField.class)) {
+                System.out.println("Указанно некорректное поле для изменения");
+                continue;
+            }
+            MutableField answerValue = MutableField.valueOf(answer);
 
-        System.out.print("Введите новое: ");
-        String newValue = scanner.nextLine();
+            System.out.print("Введите новое значение: ");
+            String newValue = scanner.nextLine();
 
-        switch (answerValue) {
-            case NAME:
-                if (newValue.isEmpty()) {
-                    System.out.println("Указанно некорректное новое значение");
-                    return;
-                }
-                org.setName(newValue);
-                break;
-            case TYPE:
-                if (!Utils.isEnum(newValue, OrganizationType.class)) {
-                    System.out.println("Указанно некорректное новое значение");
-                    return;
-                }
-                OrganizationType orgType = OrganizationType.valueOf(newValue);
-                org.setType(orgType);
-                break;
-            case EMPLOYEES_COUNT:
-                if (!isInt(newValue)) {
-                    System.out.println("Указанно некорректное новое значение");
-                    return;
-                }
-                Long employeesCount = Long.valueOf(newValue);
-                org.setEmployeesCount(employeesCount);
-                break;
-            case ADDRESS_STREET:
-                // ...
-                break;
+            switch (answerValue) {
+                case NAME:
+                    if (newValue.isEmpty()) {
+                        System.out.println("Указанно некорректное новое значение");
+                        return;
+                    }
+                    org.setName(newValue);
+                    break;
+                case TYPE:
+                    if (!Utils.isEnum(newValue, OrganizationType.class)) {
+                        System.out.println("Указанно некорректное новое значение");
+                        return;
+                    }
+                    OrganizationType orgType = OrganizationType.valueOf(newValue);
+                    org.setType(orgType);
+                    break;
+                case EMPLOYEES_COUNT:
+                    if (!Utils.isInt(newValue)) {
+                        System.out.println("Указанно некорректное новое значение");
+                        return;
+                    }
+                    Long employeesCount = Long.valueOf(newValue);
+                    org.setEmployeesCount(employeesCount);
+                    break;
+                case ADDRESS_STREET:
+                    if (!Utils.isInt(newValue)) {
+                        System.out.println("Указанно некорректное новое значение");
+                        return;
+                    }
+                    org.getPostalAddress();
+                    break;
+            }
         }
     }
 
