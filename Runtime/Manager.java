@@ -14,13 +14,6 @@ public class Manager {
     static Scanner scanner;
     static Map<Long, Organization> map;
 
-    @Override
-    public String toString() {
-        return "Manager{" +
-                "map=" + map +
-                '}';
-    }
-
     Manager() {
         this.map = new Hashtable<>();
     }
