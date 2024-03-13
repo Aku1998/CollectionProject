@@ -80,7 +80,7 @@ public class Main {
                     break;
 
                 case "removeKey":
-                    Manager.removeKey();
+                    Manager.removeKey(argsIn);
                     break;
 
                 case "clear":
@@ -99,8 +99,8 @@ public class Main {
                     Manager.maxByID();
                     break;
 
-                case "count_greater_than_type {type}":
-                    Manager.countGreaterThanType();
+                case "count_greater_than_type":
+                    Manager.countGreaterThanType(argsIn);
                     break;
 
                 default:

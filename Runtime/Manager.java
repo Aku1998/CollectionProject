@@ -8,7 +8,6 @@ import CollectionProject.Object.OrganizationType;
 import java.util.*;
 
 import static CollectionProject.Runtime.Utils.isInt;
-import static CollectionProject.Runtime.Utils.isLong;
 
 
 public class Manager {
@@ -84,39 +83,87 @@ public class Manager {
         System.out.println(map);
     }
 
-    public static Organization insert(){ // Akmoor
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Введите имя: ");;
-        String name= scanner.nextLine();
-        System.out.println("Введите количество сотрудников: ");
-        Long employeesCount= scanner.nextLong();
+    private String readName() {
+        String name;
+
+        do {
+            System.out.print("Введите имя: ");
+            name = this.scanner.nextLine();
+            if (name.isEmpty()) {
+                System.out.println("имя не может быть пустой");
+                continue;
+            }
+            return name;
+        } while (true);
+    }
+
+    private String readEmployeesCount() {
+        String employeesCount;
+
+        do {
+            System.out.print("Введите колличество сотрудников: ");
+            employeesCount = this.scanner.nextLine();
+            if (!Utils.isInt(employeesCount)) {
+                System.out.println("Количество сотрудников должно быть целочисленным значением");
+                continue;
+            }
+            return String.valueOf(Long.parseLong(employeesCount));
+        } while (true);
+    }
+
+    public OrganizationType readTypeOrganization() {
         System.out.println("Выберите тип организации: 1 PUBLIC, 2 OPEN_JOINT_STOCK_COMPANY,3 TRUST ");
         getNewElement(scanner);
-        System.out.println("Введите адрес: ");
-        address(scanner);
 
-        Organization organization=new Organization(name,employeesCount,getNewElement(scanner),address(scanner));
+        return null;
+    }
 
-        System.out.println(organization);
-        return insert() ;
+    public String readAddress() {
+        String addressLine;
+
+        while (true) {
+            System.out.print("Введите адрес организации: ");
+            addressLine = scanner.nextLine();
+
+            if (addressLine.length() > 191) {
+                System.out.println("Этот адрес слишком длинный, максимальное кол-во символов - 191");
+                continue;
+            }
+            return addressLine;
+        }
+    }
+
+
+    public void insert() { // добавить новый элемент с заданным ключом
+        System.out.println("Запущена команда добавления новой организации, введите данные.");
+
+        String name = readName();
+        Long employeesCount = Long.valueOf(readEmployeesCount());
+        OrganizationType organizationType = readTypeOrganization();
+        Address address = new Address(readAddress());
+        Organization organization = new Organization(name, employeesCount, organizationType, address);
 
     }
-    public static OrganizationType getNewElement(Scanner scanner){  // Akmoor
-        int choice=scanner.nextInt();
+
+    public static OrganizationType getNewElement(Scanner scanner) {
+        int choice = scanner.nextInt();
         scanner.nextLine();
-        switch (choice){
+        switch (choice) {
             case 1:
                 return OrganizationType.PUBLIC;
-            case  2:
+            case 2:
                 return OrganizationType.TRUST;
             case 3:
                 return OrganizationType.OPEN_JOINT_STOCK_COMPANY;
-            default: System.out.println("Повторите еще раз");       }
+            default:
+                System.out.println("Повторите еще раз");
+        }
 
-        return null ;
+        return null;
     }
-    public static Address address(Scanner scanner){ // Akmoor
-        String address=scanner.nextLine();
+
+    public static Address address(Scanner scanner) { // Akmoor
+        String address = scanner.nextLine();
         System.out.println(address);
         return null;
     }
@@ -125,12 +172,25 @@ public class Manager {
         System.out.println("Метод для updateID");
     }
 
-    public static void removeKey() {
-        System.out.println("Метод для removeKey");
+    public static void removeKey(String element) {
+        Hashtable<Long, Object> longObjectHashtable = new Hashtable<>();
+
+        if (!Utils.isInt(element)) {
+            System.out.println("Некорректный аргумент");
+            return;
+        }
+
+        long id = Long.parseLong(element);
+        if (longObjectHashtable.remove(id) == null) {
+            System.out.println("Не найдено");
+        }
     }
 
+
     public static void clear() {
-        System.out.println("Метод для clear");
+        Hashtable<Long, Object> longObjectHashtable = new Hashtable<>();
+        longObjectHashtable.clear();
+        System.out.println("Коллекция очищен");
     }
 
     public static void replaceIfGreater(Hashtable hashtable, String argsIn) {   // VAL: этот метод ещё в разработке, но пока что так
@@ -229,13 +289,9 @@ public class Manager {
         }
     }
 
-    public static void countGreaterThanType(){
-        System.out.println("Введите команду: ");
-        String cmd = scanner.nextLine(); // count_greater_than_type TRUST
-        cmd = cmd.split(" ")[0];
-        String argIn = cmd.split(" ")[1];
+    public static void countGreaterThanType(String argIn) {
 // проверка аргумента
-        if (!Utils.isEnum(argIn, OrganizationType.class)) {
+        if (!Utils.isEnum(String.valueOf(argIn), OrganizationType.class)) {
             System.out.println("Указанно некорректное значение");
             return;
         }
@@ -248,8 +304,7 @@ public class Manager {
             }
         }
         System.out.println("Количество: " + counter);
-
-    };
+    }
 
     public static void maxByID() {
         long maxId = -1;
@@ -259,38 +314,6 @@ public class Manager {
             }
         }
         System.out.println(map.get(maxId));
-    }
-
-    public int getEmployeeNumberFromUser() {
-        while (true) {
-            System.out.print("Введите кол-во работников: ");
-            String line = scanner.nextLine();
-
-            if (!isInt(line)) {
-                System.out.println("Это не число");
-                continue;
-            }
-            int employeeNumber = Integer.parseInt(line);
-
-            if (employeeNumber > 0) {
-                return employeeNumber;
-            }
-
-            System.out.println("Не может быть пустым");
-        }
-    }
-
-    public String getAddressFromUser() {
-        while (true) {
-            System.out.print("Введите адрес организации: ");
-            String addressLine = scanner.nextLine();
-
-            if (addressLine.length() > 191) {
-                System.out.println("Этот адрес слишком длинный, максимальное кол-во символов - 191");
-                continue;
-            }
-            return addressLine;
-        }
     }
 
 }
