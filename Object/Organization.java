@@ -29,10 +29,9 @@ public class Organization implements Comparable<Organization> {
     }
 
     // VAL: тут все геттеры и сеттеры, чтобы в будущем можно было использовать без проблем при случае
-    public long getID() {
+    public Long getID() {
         return id;
     }
-
     public String getName() {
         return name;
     }
@@ -74,4 +73,5 @@ public class Organization implements Comparable<Organization> {
         }
         return 0;
     }
+
 }

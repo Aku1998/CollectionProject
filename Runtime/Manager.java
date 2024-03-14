@@ -12,10 +12,14 @@ import static CollectionProject.Runtime.Utils.isInt;
 
 public class Manager {
     static Scanner scanner;
-    static Map<Long, Organization> map;
+    static Map<Long, Organization> orgMap;
+
+    public void setOrgMap(Map<Long, Organization> orgMap) {
+        Manager.orgMap = orgMap;
+    }
 
     Manager() {
-        this.map = new Hashtable<>();
+        orgMap = new Hashtable<>();
     }
 
     public static void greetings() {
@@ -32,8 +36,8 @@ public class Manager {
                         "update {id}\n" +
                         "remove_key {id}\n" +
                         "clear\n" +
-                        "replace_if_greater {id}\n" +
-                        "remove_greater_key {id}\n" +
+                        "remove_if_greater {id}\n" +
+                        "remove_by_greater {id}\n" +
                         "max_by_id \n" +
                         "count_greater_than_type {type} \n");
     }
@@ -54,18 +58,17 @@ public class Manager {
                 "clear: удаление всех элементов коллекции\n" +
                 "replace_if_greater {id}: замена элемента коллекции, если значение работников больше\n" +
                 "       старого элемента коллекции по заданному ID\n" +
-                "remove_greater_key {id}: удаление всех элементов, ID которых меньше заданного значения\n" +
+                "remove_by_greater {id}: удаление всех элементов, ID которых меньше заданного значения\n" +
                 "max_by_id: вывод элемента с самым высоким значением ID \n" +
                 "count_greater_than_type {type}: подсчёт кол-ва элементов, чей тип больше заданного");
     }
 
     public static void info(Hashtable hashtable) {
+
         Set set = hashtable.entrySet();
 
-        Iterator i = set.iterator(); // создаю итератор, который будет проходиться по всей Map'е
-
-        while (i.hasNext()) {  // создаю метод, который считывает кол-во элементов в таблице
-            Map.Entry example = (Map.Entry) i.next();
+        for (Object org : set) {  // создаю метод, который считывает кол-во элементов в таблице
+            Map.Entry example = (Map.Entry) org;
         }
         System.out.println("Таблица хешов состоит из объектов Организаций\n" +
                 "На данный момент в таблице находится " + hashtable.size() + " организации_й\n");
@@ -84,7 +87,7 @@ public class Manager {
             System.out.print("Введите имя: ");
             name = scanner.nextLine();
             if (name.isEmpty()) {
-                System.out.println("имя не может быть пустой");
+                System.out.println("Имя не может быть пустым");
                 continue;
             }
             return name;
@@ -96,7 +99,7 @@ public class Manager {
         String employeesCount;
 
         do {
-            System.out.print("Введите колличество сотрудников: ");
+            System.out.print("Введите количество сотрудников: ");
             employeesCount = scanner.nextLine();
             if (!Utils.isInt(employeesCount)) {
                 System.out.println("Количество сотрудников должно быть целочисленным значением");
@@ -137,7 +140,7 @@ public class Manager {
         OrganizationType organizationType = readTypeOrganization();
         Address address = new Address(readAddress());
         Organization organization = new Organization(name, employeesCount, organizationType, address);
-        map.put(organization.getID(), organization);
+        orgMap.put(organization.getID(), organization);
         System.out.println("The new organization inserted");
         System.out.println(organization);
     }
@@ -173,18 +176,18 @@ public class Manager {
         }
 
         long id = Long.parseLong(String.valueOf(element));
-        if (map.remove(id) == null) {
+        if (orgMap.remove(id) == null) {
             System.out.println("Не найдено");
         }
     }
 
 
     public static void clear() {
-        map.clear();
+        orgMap.clear();
         System.out.println("Коллекция очищена");
     }
 
-    public static void replaceIfGreater(Hashtable hashtable, String argsIn) {   // VAL: этот метод ещё в разработке, но пока что так
+    public static void replaceIfGreater(String argsIn) {
         if (!isInt(argsIn)) {
             System.out.println("Введённые аргументы указаны неверно.");
             return;
@@ -198,14 +201,15 @@ public class Manager {
 
         Organization newOrg = new Organization(name, employeesCount, organizationType, address);
 
-        Organization oldOrg = (Organization) hashtable.get(argsIn);
+        long args = Long.parseLong(argsIn);
+
+        Organization oldOrg = orgMap.get(args);
         if (newOrg.compareTo(oldOrg) < 0) {
             System.out.println("Значение кол-ва работников новой организации меньше старой организации." +
                     "Попробуйте ещё раз, изменив значение новой организации.");
-            return;
         } else if (newOrg.compareTo(oldOrg) > 0) {
-            map.remove(oldOrg.getID());
-            map.put(newOrg.getID(), newOrg);
+            orgMap.remove(oldOrg.getID());
+            orgMap.put(newOrg.getID(), newOrg);
         } else if (newOrg.compareTo(oldOrg) == 0) {
             System.out.println("Обе организации имеют одинаковое кол-во работников." +
                     "Попробуйте ещё раз, изменив значение новой организации.");
@@ -213,26 +217,26 @@ public class Manager {
 
     }
 
-    public static void removeByGreaterKey(String argsIn) {
+    public static void removeByGreaterKey(String argsIn, Hashtable hashtable) {
         if (!Utils.isLong(argsIn)) {
             System.out.println("Введённые аргументы указаны неверно.");
             return;
         }
-
-        Long arg = Long.valueOf(argsIn);
         Set<Long> set = new HashSet<>();
+        long args = Long.valueOf(argsIn);
 
-        for (Long mapValue : map.keySet()) {
-            if (mapValue > arg) {
-                set.add(mapValue);
+        for (Long map : orgMap.keySet()) {
+            if (map > args) {
+                set.add(map);
             }
         }
 
         for (Long id : set) {
-            System.out.println("Вы успешно удалили " + map.get(id));
-            map.remove(id);
-        }
 
+            System.out.println("Вы успешно удалили " + orgMap.get(id));
+
+            orgMap.remove(id);
+        }
     }
 
 
@@ -243,7 +247,7 @@ public class Manager {
         }
         long idValue = Long.parseLong(id);
 
-        Organization org = map.get(idValue);
+        Organization org = orgMap.get(idValue);
         if (org == null) {
             System.out.println("Такого id нет");
             return;
@@ -309,7 +313,7 @@ public class Manager {
         OrganizationType targetType = OrganizationType.valueOf(argIn);
 // логика команды
         int counter = 0;
-        for (Organization organization : map.values()) {
+        for (Organization organization : orgMap.values()) {
             if (organization.getType().ordinal() > targetType.ordinal()) {
                 counter = counter + 1;
             }
@@ -319,12 +323,13 @@ public class Manager {
 
     public static void maxByID() {
         long maxId = -1;
-        for (Organization org : map.values()) {
+        for (Organization org : orgMap.values()) {
             if (org.getID() > maxId) {
                 maxId = org.getID();
+                System.out.println(orgMap.get(maxId));
+                break;
             }
         }
-        System.out.println(map.get(maxId));
     }
 
 }

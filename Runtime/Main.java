@@ -21,6 +21,7 @@ public class Main {
         // VAl: создание organizationHashtable, где ключом у нас является ID, а самой хранящейся информацией объект организации
         Hashtable<Long, Organization> organizationHashtable = new Hashtable<>();
         String chosenCommand; // VAl: инициализация String, чтобы тот был виден в switch case'ах
+        manager.setOrgMap(organizationHashtable);
 
         /* VAL: для того, чтобы конструктор работал корректно вместе с полем postalAddress, т.к. это является объектом другого класса,
         нам нужно вместо обычной строки писать в конструктор, например, вместо просто строки "Город Пушкин, улица Колотушкина",
@@ -52,6 +53,7 @@ public class Main {
         organizationHashtable.put(ascenaRetailGroup.getID(), ascenaRetailGroup); // VAl: то же самое, что и выше
         organizationHashtable.put(cSX.getID(), cSX); // VAl: то же самое, что и выше
         organizationHashtable.put(myNewBank.getID(), myNewBank); // VAl: то же самое, что и выше
+
 
         do {
             /* VAl: создание цикла do, который будет вмещать в себя switch case для работы с программой,
@@ -101,12 +103,12 @@ public class Main {
                     Manager.clear();
                     break;
 
-                case "replace_if_greater {key}":
-                    Manager.replaceIfGreater(organizationHashtable, argsIn);
+                case "replace_if_greater":
+                    Manager.replaceIfGreater(argsIn);
                     break;
 
-                case "remove_by_greater {key}":
-                    Manager.removeByGreaterKey(argsIn);
+                case "remove_by_greater":
+                    Manager.removeByGreaterKey(argsIn, organizationHashtable);
                     break;
 
                 case "max_by_id":
